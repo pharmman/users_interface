@@ -1,7 +1,7 @@
 import {Table, UserType} from "../Table/Table";
 import {useState} from "react";
 import {FindIndex} from "../FindIndex/FindIndex";
-import {Paginator} from "../Paginator/Paginator";
+import {Paginate} from "../Paginate/Paginate";
 
 
 export type SortConfigType = {
@@ -11387,18 +11387,22 @@ export const Test = () => {
 
     const titles = Object.keys(data[0]).filter(t => t !== 'address')
 
-    const [currentPage, setCurentPage] = useState(1)
-    const [pageSize, setPageSize] = useState(50)
-    const indexOfLast = currentPage * pageSize
-    const indexOfFirst = indexOfLast - pageSize
-    const currentData = sortedData.slice(indexOfFirst, indexOfLast)
-    const paginate = (n:number) => {setCurentPage(n)}
+
+    const [currentPage, setCurrentPage] = useState(0)
+
+    const handlePageClick = (page: number) => {
+        setCurrentPage(page)
+    }
+    const pageSize = 50
+    const offset = currentPage * pageSize
+
+    const pageData = sortedData.slice(offset, offset + pageSize)
 
     return (
         <>
             <FindIndex inputValue={inputValue} setInputValue={setInputValue} setIsDataFiltered={setIsDataFiltered}/>
-            <Table data={currentData} setSortingField={sorting} titles={titles} sortingField={sortingField}/>
-            <Paginator arr={sortedData} postsPerPage={pageSize} totalPosts={sortedData.length} paginate={paginate}/>
+            <Table data={pageData} setSortingField={sorting} titles={titles} sortingField={sortingField}/>
+            <Paginate totalUsersCount={sortedData.length} pageSize={pageSize} onChangeHandler={handlePageClick}/>
         </>
     )
 }

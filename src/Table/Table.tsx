@@ -67,7 +67,7 @@ export const Table: React.FC<TablePropsType> = ({data, setSortingField, titles, 
                                     ?
                                     <th key={index}>{v}</th>
                                     :
-                                    <th key={index} className={style.hovered}>{v}</th>
+                                    <th key={index}>{v}</th>
                             ))}
                         </tr>
                     )
