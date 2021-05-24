@@ -1,10 +1,8 @@
-import React, {useRef} from "react";
-import {Controller, SubmitHandler, useForm} from "react-hook-form";
-import InputMask from 'react-input-mask';
-import ReactInputMask from 'react-input-mask';
-import * as Yup from 'yup';
-import {yupResolver} from "@hookform/resolvers/yup";
-import NumberFormat from 'react-number-format';
+import React, {useRef} from 'react'
+import {Controller, SubmitHandler, useForm} from 'react-hook-form'
+import * as Yup from 'yup'
+import {yupResolver} from '@hookform/resolvers/yup'
+import NumberFormat from 'react-number-format'
 
 type AddUserPropsType = {
     titles: string[]
@@ -37,7 +35,7 @@ export const AddUser: React.FC<AddUserPropsType> = ({titles}) => {
             .email('Email is invalid'),
     });
 
-    const {register, handleSubmit, watch, formState: {errors, isDirty, isValid}, control,reset, setValue } = useForm<Inputs>({
+    const {register, handleSubmit, formState: {errors, isValid}, control,reset, setValue } = useForm<Inputs>({
         mode: "onChange",
         resolver: yupResolver(validationSchema)
     });

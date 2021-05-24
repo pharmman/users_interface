@@ -6,9 +6,7 @@ type FindIndexPropsType = {
     setIsDataFiltered: Dispatch<SetStateAction<boolean>>
 }
 
-
-export const FindIndex: React.FC<FindIndexPropsType> = ({setInputValue, inputValue, setIsDataFiltered}) => {
-
+export const Filtering: React.FC<FindIndexPropsType> = ({setInputValue, inputValue, setIsDataFiltered}) => {
     const onChangeHandler = (e: React.FormEvent<HTMLInputElement>) => {
         setInputValue(e.currentTarget.value)
         setIsDataFiltered(false)

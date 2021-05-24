@@ -1,6 +1,6 @@
 import style from './Table.module.css'
-import React, {useState} from "react";
-import {SortConfigType} from "../test/Test";
+import React, {useEffect, useState} from 'react'
+import {SortConfigType} from "../Users";
 import {CurrentUser} from "../CurrentUser/CurrentUser";
 import {AddUser} from "../AddUser/AddUser";
 
@@ -25,13 +25,16 @@ type TablePropsType = {
     data: UserType[]
     setSortingField: (key: keyof UserType) => void
     sortingField: SortConfigType
-    titles: string[]
 }
 
-export const Table: React.FC<TablePropsType> = ({data, setSortingField, titles, sortingField}) => {
+export const Table: React.FC<TablePropsType> = ({data, setSortingField, sortingField}) => {
+    // let titles = Object.keys(data[0]).filter(t => t !== 'address')
+
+    const titles = ['dsasda','dsasdasda']
 
     const [currentUser, setCurrentUser] = useState<UserType | null>(null)
     const [hovered, setHovered] = useState<boolean>(false)
+
 
     const changeCurrentUser = (user: UserType) => {
         setCurrentUser(user)
