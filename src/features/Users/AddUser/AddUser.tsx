@@ -3,12 +3,16 @@ import {Controller, SubmitHandler, useForm} from 'react-hook-form'
 import * as Yup from 'yup'
 import {yupResolver} from '@hookform/resolvers/yup'
 import NumberFormat from 'react-number-format'
+import {TitlesType} from '../Table/Table'
+import {useDispatch} from 'react-redux'
+import {addUser} from '../users-reducer'
 
 type AddUserPropsType = {
-    titles: string[]
+    titles: TitlesType[]
+    toggleAddUser: (condition: boolean) => void
 }
 
-export type Inputs = {
+type Inputs = {
     id: number
     firstName: string
     lastName: string
@@ -16,10 +20,10 @@ export type Inputs = {
     phone: string
 }
 
-const phoneRegExp = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im
+const phoneRegExp = /^[+]?[(]?[0-9]{3}[)]?[-\s.]?[0-9]{3}[-\s.]?[0-9]{4,6}$/im
 
-export const AddUser: React.FC<AddUserPropsType> = ({titles}) => {
-
+export const AddUser: React.FC<AddUserPropsType> = ({titles, toggleAddUser}) => {
+    const dispatch = useDispatch()
     const validationSchema = Yup.object().shape({
         id: Yup.string()
             .required('Id is required'),
@@ -32,48 +36,51 @@ export const AddUser: React.FC<AddUserPropsType> = ({titles}) => {
             .required('Phone is required'),
         email: Yup.string()
             .required('Email is required')
-            .email('Email is invalid'),
-    });
+            .email('Email is invalid')
+    })
 
-    const {register, handleSubmit, formState: {errors, isValid}, control,reset, setValue } = useForm<Inputs>({
-        mode: "onChange",
-        resolver: yupResolver(validationSchema)
-    });
+    const {register, handleSubmit, formState: {errors, isValid,}, control, reset, setValue } = useForm<Inputs>({
+        resolver: yupResolver(validationSchema),
+        mode: 'all',
+    })
+
+    // for phone mask
     const phoneRef = useRef(null)
 
     const onSubmit: SubmitHandler<Inputs> = (data, e) => {
-        console.log(data)
+        dispatch(addUser({user: data}))
         reset(e?.target.reset())
         setValue('phone', '')
+        toggleAddUser(false)
     }
 
     return (
         <>
             <form id={'newUser'} onSubmit={handleSubmit(onSubmit)}/>
             <tr style={{width: '100%'}}>
-                <td>{<input type={'number'}
+                <td>{<input autoComplete={'new-password'} type={'number'}
                             form={'newUser'} {...register('id')}/>}
                     {errors.id && <span>{errors.id.message}</span>}
                 </td>
-                <td>{<input form={'newUser'} {...register('firstName')}/>}
+                <td>{<input autoComplete={'new-password'} form={'newUser'} {...register('firstName')}/>}
                     {errors.firstName && <span>{errors.firstName.message}</span>}
                 </td>
-                <td>{<input form={'newUser'} {...register('lastName')}/>}
+                <td>{<input autoComplete={'new-password'} form={'newUser'} {...register('lastName')}/>}
                     {errors.lastName && <span>{errors.lastName.message}</span>}
                 </td>
-                <td>{<input type={'email'} form={'newUser'} {...register('email')}/>}
+                <td>{<input autoComplete={'new-password'} type={'email'} form={'newUser'} {...register('email')}/>}
                     {errors.email && <span>{errors.email.message}</span>}
                 </td>
                 <td>
                     {<Controller
                         control={control}
                         render={({field}) => (
-                            <NumberFormat {...field} ref={phoneRef} format={'(###)###-####'}/>
+                            <NumberFormat autoComplete={'new-password'} {...field} ref={phoneRef} format={'(###)###-####'} mask={' '}/>
                         )}
                         name={'phone'}/>}
                     {errors.phone && <span>{errors.phone.message}</span>}
                 </td>
-                <td><input form={'newUser'} disabled={!isValid} type="submit"/></td>
+                <td><button form={'newUser'} disabled={!isValid} type="submit">Add to table</button></td>
             </tr>
         </>
     )

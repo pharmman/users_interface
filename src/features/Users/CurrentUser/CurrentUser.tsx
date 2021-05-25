@@ -1,5 +1,5 @@
-import {UserType} from "../Table/Table";
 import React from "react";
+import {UserType} from '../users-reducer'
 
 type CurrentUserPropsType = {
     user: UserType

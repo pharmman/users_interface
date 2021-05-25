@@ -1,5 +1,5 @@
 import axios from 'axios'
-import {UserType} from '../features/Users/Table/Table'
+import {UserType} from '../features/Users/users-reducer'
 
 export const usersAPI = {
     getUsers(size: '32' | '1000') {

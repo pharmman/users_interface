@@ -1,80 +1,56 @@
 import style from './Table.module.css'
-import React, {useEffect, useState} from 'react'
-import {SortConfigType} from "../Users";
-import {CurrentUser} from "../CurrentUser/CurrentUser";
-import {AddUser} from "../AddUser/AddUser";
+import React, {useState} from 'react'
+import {SortConfigType} from '../Users'
+import {CurrentUser} from '../CurrentUser/CurrentUser'
+import {AddUser} from '../AddUser/AddUser'
+import {UserType} from '../users-reducer'
 
-export interface UserType  {
-    id: number
-    firstName: string
-    lastName: string
-    email: string
-    phone: string
-    address: AddressType
-    description: string
-}
-
-export type AddressType = {
-    streetAddress: string
-    city: string
-    state: string
-    zip: string
-}
+export type TitlesType = keyof Omit<UserType, 'address'>
 
 type TablePropsType = {
     data: UserType[]
     setSortingField: (key: keyof UserType) => void
     sortingField: SortConfigType
+    titles: TitlesType[]
 }
 
-export const Table: React.FC<TablePropsType> = ({data, setSortingField, sortingField}) => {
-    // let titles = Object.keys(data[0]).filter(t => t !== 'address')
-
-    const titles = ['dsasda','dsasdasda']
-
+export const Table: React.FC<TablePropsType> = ({data, setSortingField, sortingField, titles}) => {
     const [currentUser, setCurrentUser] = useState<UserType | null>(null)
-    const [hovered, setHovered] = useState<boolean>(false)
-
-
+    const getValues = (user:UserType):Array<string | number> => {
+        return titles.map(title => typeof user[title]  !== 'object' ? user[title] : '')
+    }
+    const [addUser, setAddUser] = useState<boolean>(false)
     const changeCurrentUser = (user: UserType) => {
         setCurrentUser(user)
     }
-
-    const onMouseEnter = () => {
-        setHovered(true)
+    const toggleAddUser = (state: boolean) => {
+        setAddUser(state)
     }
-
-    const onMouseLeave = () => {
-        setHovered(false)
-    }
-
     return (
         <div>
+            <button onClick={() => toggleAddUser(true)}>Add User</button>
             <table className={style.myTable}>
                 <thead>
                 <tr className={style.row}>
                     {titles.map((t, index) => {
                         return sortingField.key === t ?
-                            <th key={index} onClick={() => setSortingField(t as keyof UserType)}>{t} {sortingField.direction === 'up' ? <>▼</> : <>▲</>}</th>
+                            <th key={index}
+                                onClick={() => setSortingField(t as keyof UserType)}>{t} {sortingField.direction === 'up' ? <>▼</> : <>▲</>}</th>
                             :
                             <th key={index} onClick={() => setSortingField(t as keyof UserType)}>{t}</th>
                     })}
                 </tr>
                 </thead>
                 <tbody>
-                <AddUser titles={titles}/>
+                <AddUser toggleAddUser={toggleAddUser} titles={titles}/>
                 {data.map((u, index) => (
-                        <tr onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} onClick={() => changeCurrentUser(u)}
+                        <tr onClick={() => changeCurrentUser(u)}
                             key={index}>
-                            {Object.values(u).filter(q => typeof q !== 'object').map((v, index) => (hovered
-                                    ?
-                                    <th key={index}>{v}</th>
-                                    :
-                                    <th key={index}>{v}</th>
+                            {getValues(u).map((v, index) => (
+                                <th key={index}>{v}</th>
                             ))}
                         </tr>
-                    )
-                )}
+                    ))}
                 </tbody>
             </table>
             {currentUser && <CurrentUser user={currentUser}/>}
@@ -82,3 +58,15 @@ export const Table: React.FC<TablePropsType> = ({data, setSortingField, sortingF
     )
 }
 
+// const asd = (props: any) => {
+//     <div>
+//         <form>
+//             <table>
+//                 <thead></thead>
+//                 <fomitem></fomitem>
+//                 {...props.children}
+//             </table>
+//         </form>
+//
+//     </div>
+// }

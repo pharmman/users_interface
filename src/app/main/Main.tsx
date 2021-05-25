@@ -3,13 +3,8 @@ import {Users} from '../../features/Users/Users'
 
 export const Main:React.FC = () => {
     const [tableSize, setTableSize] = useState<'small' | 'big' | null>(null)
-
-    const setSmallSize = () => {
-        setTableSize('small')
-    }
-    const setBigSize = () => {
-        setTableSize('big')
-    }
+    const setSmallSize = () => {setTableSize('small')}
+    const setBigSize = () => {setTableSize('big')}
 
     return (
         <div>

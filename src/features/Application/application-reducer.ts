@@ -1,28 +1,27 @@
-import {createAction, createSlice} from '@reduxjs/toolkit'
+import {createAction, createSlice, PayloadAction} from '@reduxjs/toolkit'
 
-export type AppErrorType = null | string
+export type AppErrorType = string
 
 const initialState = {
     loading: false,
-    error: null as AppErrorType,
+    error: '' as AppErrorType,
 }
 
-export type appReducerInitialState = typeof initialState
+export type AppReducerType = typeof initialState
 
 export const setAppLoading = createAction<{ loading: boolean }>('app/setAppLoading')
 export const setAppError = createAction<{ error: AppErrorType }>('app/setAppError')
 
 export const slice = createSlice({
     name: 'app',
-    initialState: initialState as appReducerInitialState,
-    reducers: {},
-    extraReducers: builder => {
-        builder.addCase(setAppLoading, (state, action) => {
+    initialState: initialState as AppReducerType,
+    reducers: {
+        setAppLoading: (state, action: PayloadAction<{ loading: boolean }>) => {
             state.loading = action.payload.loading
-        })
-        builder.addCase(setAppError, (state, action) => {
+        },
+        setAppError: (state, action: PayloadAction<{ error: AppErrorType }>) => {
             state.error = action.payload.error
-        })
+        }
     }
 })
 
