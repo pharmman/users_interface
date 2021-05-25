@@ -4,6 +4,7 @@ import {SortConfigType} from '../Users'
 import {CurrentUser} from '../CurrentUser/CurrentUser'
 import {AddUser} from '../AddUser/AddUser'
 import {UserType} from '../users-reducer'
+import {Button} from '@material-ui/core'
 
 export type TitlesType = keyof Omit<UserType, 'address'>
 
@@ -28,7 +29,7 @@ export const Table: React.FC<TablePropsType> = ({data, setSortingField, sortingF
     }
     return (
         <div>
-            <button onClick={() => toggleAddUser(true)}>Add User</button>
+            <Button variant={'contained'} color={'primary'} onClick={() => toggleAddUser(true)}>Add User</Button>
             <table className={style.myTable}>
                 <thead>
                 <tr className={style.row}>
@@ -42,7 +43,7 @@ export const Table: React.FC<TablePropsType> = ({data, setSortingField, sortingF
                 </tr>
                 </thead>
                 <tbody>
-                <AddUser toggleAddUser={toggleAddUser} titles={titles}/>
+                {addUser && <AddUser toggleAddUser={toggleAddUser} titles={titles}/>}
                 {data.map((u, index) => (
                         <tr onClick={() => changeCurrentUser(u)}
                             key={index}>
