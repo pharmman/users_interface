@@ -8,7 +8,6 @@ import {useDispatch} from 'react-redux'
 import {addUser} from '../users-reducer'
 
 type AddUserPropsType = {
-    titles: TitlesType[]
     toggleAddUser: (condition: boolean) => void
 }
 
@@ -22,7 +21,7 @@ type Inputs = {
 
 const phoneRegExp = /^[+]?[(]?[0-9]{3}[)]?[-\s.]?[0-9]{3}[-\s.]?[0-9]{4,6}$/im
 
-export const AddUser: React.FC<AddUserPropsType> = ({titles, toggleAddUser}) => {
+export const AddUser: React.FC<AddUserPropsType> = ({ toggleAddUser}) => {
     const dispatch = useDispatch()
     const validationSchema = Yup.object().shape({
         id: Yup.string()

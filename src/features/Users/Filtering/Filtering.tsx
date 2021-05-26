@@ -18,7 +18,7 @@ export const Filtering: React.FC<FindIndexPropsType> = ({setInputValue, inputVal
     }
 
     return (
-        <div style={{display: 'flex', justifyContent: 'space-around'}}>
+        <div style={{display: 'flex', justifyContent: 'center'}}>
             <TextField size={'small'} variant={'outlined'} value={inputValue} label={'Find'} onChange={onChangeHandler}/>
             <Button size={'large'} color={'primary'} variant={'contained'} onClick={onClickHandler}>Find</Button>
         </div>

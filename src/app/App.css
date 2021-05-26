@@ -1,0 +1,19 @@
+ul {
+    display: inline;
+    list-style: none;
+}
+
+ul li {
+    cursor: pointer;
+}
+
+.paginationContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+}
+
+.paginationActiveLink {
+    border: 1px solid blue;
+    padding: 6px;
+}

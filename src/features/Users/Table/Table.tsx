@@ -1,10 +1,10 @@
-import style from './Table.module.css'
 import React, {useState} from 'react'
 import {SortConfigType} from '../Users'
 import {CurrentUser} from '../CurrentUser/CurrentUser'
-import {AddUser} from '../AddUser/AddUser'
 import {UserType} from '../users-reducer'
-import {Button} from '@material-ui/core'
+import {Button, Paper, Table as MaterialTable, TableContainer} from '@material-ui/core'
+import {TableHead} from './TableHead/TableHead'
+import {TableBody} from './TableBody/TableBody'
 
 export type TitlesType = keyof Omit<UserType, 'address'>
 
@@ -17,43 +17,19 @@ type TablePropsType = {
 
 export const Table: React.FC<TablePropsType> = ({data, setSortingField, sortingField, titles}) => {
     const [currentUser, setCurrentUser] = useState<UserType | null>(null)
-    const getValues = (user:UserType):Array<string | number> => {
-        return titles.map(title => typeof user[title]  !== 'object' ? user[title] : '')
+    const getValues = (user: UserType): Array<string | number> => {
+        return titles.map(title => typeof user[title] !== 'object' ? user[title] : '')
     }
     const [addUser, setAddUser] = useState<boolean>(false)
-    const changeCurrentUser = (user: UserType) => {
-        setCurrentUser(user)
-    }
-    const toggleAddUser = (state: boolean) => {
-        setAddUser(state)
-    }
+    const toggleAddUser = (state: boolean) => {setAddUser(state)}
+
     return (
         <div>
             <Button variant={'contained'} color={'primary'} onClick={() => toggleAddUser(true)}>Add User</Button>
-            <table className={style.myTable}>
-                <thead>
-                <tr className={style.row}>
-                    {titles.map((t, index) => {
-                        return sortingField.key === t ?
-                            <th key={index}
-                                onClick={() => setSortingField(t as keyof UserType)}>{t} {sortingField.direction === 'up' ? <>▼</> : <>▲</>}</th>
-                            :
-                            <th key={index} onClick={() => setSortingField(t as keyof UserType)}>{t}</th>
-                    })}
-                </tr>
-                </thead>
-                <tbody>
-                {addUser && <AddUser toggleAddUser={toggleAddUser} titles={titles}/>}
-                {data.map((u, index) => (
-                        <tr onClick={() => changeCurrentUser(u)}
-                            key={index}>
-                            {getValues(u).map((v, index) => (
-                                <th key={index}>{v}</th>
-                            ))}
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
+                <MaterialTable>
+                    <TableHead titles={titles} sortingField={sortingField} setSortingField={setSortingField}/>
+                    <TableBody data={data} getValues={getValues} setCurrentUser={setCurrentUser} addUser={addUser} toggleAddUser={toggleAddUser}/>
+                </MaterialTable>
             {currentUser && <CurrentUser user={currentUser}/>}
         </div>
     )
