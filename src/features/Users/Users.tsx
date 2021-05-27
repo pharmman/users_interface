@@ -1,12 +1,14 @@
 import React, {useEffect, useState} from 'react'
 import {Paginate} from '../Paginate/Paginate'
 import {Filtering} from './Filtering/Filtering'
-import {Table, TitlesType} from './Table/Table'
 import {useDispatch, useSelector} from 'react-redux'
 import {AppRootStateType} from '../../app/store'
 import {getUsers, UserType} from './users-reducer'
 import {useSorting} from '../useSorting'
+import {MainPage} from './MainPage/MainPage'
 
+
+export type TitlesType = keyof Omit<UserType, 'address'>
 
 export type SortConfigType = {
     key: keyof UserType | null
@@ -45,7 +47,7 @@ export const Users: React.FC<UsersPropsType> = ({tableSize}) => {
     const handlePageClick = (page: number) => {
         setCurrentPage(page)
     }
-    const pageSize = 50
+    const pageSize = 5
     const offset = currentPage * pageSize
     const pageData = sortedData.slice(offset, offset + pageSize)
 
@@ -60,8 +62,8 @@ export const Users: React.FC<UsersPropsType> = ({tableSize}) => {
     return (
         <>
             <Filtering inputValue={inputValue} setInputValue={setInputValue} setIsDataFiltered={setIsDataFiltered}/>
-            <Table titles={titles} data={pageData} setSortingField={sorting} sortingField={sortingField}/>
-            <Paginate totalUsersCount={sortedData.length} pageSize={pageSize} onChangeHandler={handlePageClick}/>
+            <MainPage titles={titles} data={pageData} setSortingField={sorting} sortingField={sortingField}/>
+            <Paginate totalItemsCount={sortedData.length} onPageChanged={handlePageClick} pageSize={pageSize}/>
         </>
     )
 }

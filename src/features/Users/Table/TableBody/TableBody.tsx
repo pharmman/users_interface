@@ -19,7 +19,7 @@ export const TableBody:React.FC<TableBodyPropsType> = ({setCurrentUser, data,get
 
     return (
         <MaterialTableBody>
-            {addUser && <AddUser toggleAddUser={toggleAddUser}/>}
+            <AddUser toggleAddUser={toggleAddUser}/>
             {data.map((u, index) => (
                 <TableRow onClick={() => changeCurrentUser(u)}
                           key={index}>
