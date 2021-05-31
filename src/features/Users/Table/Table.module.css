@@ -3,15 +3,3 @@
     border-collapse: collapse;
     cursor: pointer;
 }
-
-.myTable {
-    width: 100%;
-}
-
-.row {
-    white-space: nowrap;
-}
-
-.hovered {
-    color: red;
-}

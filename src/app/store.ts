@@ -15,6 +15,3 @@ export const store = configureStore({
 })
 
 export type AppRootStateType = ReturnType<typeof store.getState>
-
-// @ts-ignore
-window.store = store

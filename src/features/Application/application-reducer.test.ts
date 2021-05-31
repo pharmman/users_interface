@@ -1,4 +1,4 @@
-import {applicationReducer, AppReducerType, setAppError, setAppLoading} from '../application-reducer'
+import {applicationReducer, AppReducerType, setAppError, setAppLoading} from './application-reducer'
 
 
 describe('Application reducer test', () => {

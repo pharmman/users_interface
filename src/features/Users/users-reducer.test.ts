@@ -1,4 +1,4 @@
-import {addUser, getUsers, noAddress, usersReducer, UserType} from '../users-reducer'
+import {addUser, getUsers, noAddress, usersReducer, UserType} from './users-reducer'
 
 describe('users-reducer test', () => {
     let startState: UserType[]
@@ -109,15 +109,15 @@ describe('users-reducer test', () => {
             firstName: 'testFirstName',
             lastName: 'testLastName',
             phone: 'testPhone',
-            address: noAddress,
+            address: noAddress
         }
 
         const action = addUser({user})
         const endState = usersReducer(startState, action)
 
-        expect(endState).toEqual([user,...startState])
+        expect(endState).toEqual([user, ...startState])
     })
-    })
+})
 
 
 

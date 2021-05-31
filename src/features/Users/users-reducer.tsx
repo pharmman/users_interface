@@ -1,6 +1,6 @@
-import {createAction, createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit'
+import {createAction, createAsyncThunk, createSlice} from '@reduxjs/toolkit'
 import {usersAPI} from '../../api/UsersApi'
-import {setAppLoading} from '../Application/application-reducer'
+import {setAppError, setAppLoading} from '../Application/application-reducer'
 
 export interface UserType {
     id: number
@@ -12,6 +12,8 @@ export interface UserType {
     description: string
 }
 
+// export type UserDomainType = Omit<UserType, 'description' & 'address'>
+
 export type AddressType = {
     streetAddress: string
     city: string
@@ -19,7 +21,7 @@ export type AddressType = {
     zip: string
 }
 
-type UserDomainType = Omit<UserType, 'address' | 'description'>
+export type UserDomainType = Omit<UserType, 'address' | 'description'>
 
 export const noAddress:AddressType = {
     zip: 'No indicated',
@@ -30,30 +32,34 @@ export const noAddress:AddressType = {
 
 export const getUsers = createAsyncThunk('users/getUsers', async (size: 'big' | 'small', {dispatch, rejectWithValue}) => {
     dispatch(setAppLoading({loading: true}))
+    dispatch(setAppError({error: ''}))
     try {
         const res = await usersAPI.getUsers(size === 'small' ? '32' : '1000')
         return {users: res.data}
     } catch (err) {
+        dispatch(setAppError({error: err.message}))
+        console.log(err.message)
         return rejectWithValue(err)
     }finally {
         dispatch(setAppLoading({loading: false}))
     }
 })
 
+export const addUser = createAction<{user:UserDomainType }>('users/addUser')
+
 const slice = createSlice({
     name: 'users',
     initialState: [] as UserType[],
     reducers: {
-        addUser: (state, action:PayloadAction<{user:UserDomainType}>) => {
-            state.unshift({...action.payload.user, description: 'No description', address: noAddress})
-        }
     },
     extraReducers: builder => {
         builder.addCase(getUsers.fulfilled, (state, action) => {
             return [...action.payload.users]
         })
+        builder.addCase(addUser,((state, action) => {
+            state.unshift({...action.payload.user, description: 'No description', address: noAddress})
+        }))
     }
 })
 
 export const usersReducer = slice.reducer
-export const {addUser} = slice.actions

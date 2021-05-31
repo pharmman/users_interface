@@ -5,8 +5,10 @@ services:
   react-app:
     #    stdin_open: true
     #    tty: true
-#    build:
-#      context: .
-#      dockerfile: Dockerfile.dev
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+    ports:
+      - '8080:80'
 #    env_file:
 #      - ./.env

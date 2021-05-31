@@ -1,26 +1,24 @@
-import React, {Dispatch, SetStateAction} from "react";
-import {Button, TextField} from '@material-ui/core'
+import React from 'react'
+import {Button, Grid, TextField} from '@material-ui/core'
 
 type FindIndexPropsType = {
     inputValue: string
-    setInputValue: Dispatch<SetStateAction<string>>
-    setIsDataFiltered: Dispatch<SetStateAction<boolean>>
+    setInputValueHandler: (value: string) => void
+    setDataIsFilteredHandler: (condition: boolean) => void
 }
 
-export const Filtering: React.FC<FindIndexPropsType> = ({setInputValue, inputValue, setIsDataFiltered}) => {
-    const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setInputValue(e.currentTarget.value)
-        setIsDataFiltered(false)
-    }
-
-    const onClickHandler = () => {
-        setIsDataFiltered(true)
-    }
-
+export const Filtering: React.FC<FindIndexPropsType> = React.memo(({
+                                                                       setInputValueHandler,
+                                                                       inputValue,
+                                                                       setDataIsFilteredHandler
+                                                                   }) => {
+    const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => setInputValueHandler(e.currentTarget.value)
+    const onClickHandler = () => setDataIsFilteredHandler(true)
     return (
-        <div style={{display: 'flex', justifyContent: 'center'}}>
-            <TextField size={'small'} variant={'outlined'} value={inputValue} label={'Find'} onChange={onChangeHandler}/>
-            <Button size={'large'} color={'primary'} variant={'contained'} onClick={onClickHandler}>Find</Button>
-        </div>
+        <Grid container justify={'center'}>
+            <TextField type={'search'} variant="outlined" value={inputValue}
+                       onChange={onChangeHandler}/>
+            <Button color={'primary'} variant={'contained'} onClick={onClickHandler}>Find</Button>
+        </Grid>
     )
-}
+})

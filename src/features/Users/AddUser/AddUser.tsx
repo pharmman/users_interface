@@ -1,46 +1,51 @@
 import React, {useRef} from 'react'
 import {Controller, useFormContext} from 'react-hook-form'
 import NumberFormat from 'react-number-format'
+import styles from './AddUser.module.css'
+import {Button, TableCell, TableRow, TextField} from '@material-ui/core'
 
-type AddUserPropsType = {
-    toggleAddUser: (condition: boolean) => void
-}
-
-export const AddUser: React.FC<AddUserPropsType> = ({toggleAddUser}) => {
+export const AddUser: React.FC = () => {
     const phoneRef = useRef(null)
-
-    const {formState:{errors, isValid}, register, control} = useFormContext()
+    const {formState: {errors, isValid, isDirty}, register, control} = useFormContext()
 
     return (
         <>
-            <tr style={{width: '100%'}}>
-                <td>{<input autoComplete={'new-password'} type={'number'}
-                            form={'newUser'} {...register('id')}/>}
-                    {errors.id && <span>{errors.id.message}</span>}
-                </td>
-                <td>{<input autoComplete={'new-password'} form={'newUser'} {...register('firstName')}/>}
-                    {errors.firstName && <span>{errors.firstName.message}</span>}
-                </td>
-                <td>{<input autoComplete={'new-password'} form={'newUser'} {...register('lastName')}/>}
-                    {errors.lastName && <span>{errors.lastName.message}</span>}
-                </td>
-                <td>{<input autoComplete={'new-password'} type={'email'} form={'newUser'} {...register('email')}/>}
-                    {errors.email && <span>{errors.email.message}</span>}
-                </td>
-                <td>
+            <TableRow className={styles.row}>
+                <TableCell align={'center'}>{<TextField error={!!errors.id} label={errors.id && 'Error'}
+                                                        helperText={errors.id && errors.id.message}
+                                                        autoComplete={'new-password'} type={'number'}
+                                                        {...register('id')}/>}
+                </TableCell>
+                <TableCell align={'center'}>{<TextField error={!!errors.firstName} label={errors.firstName && 'Error'}
+                                                        helperText={errors.firstName && errors.firstName.message}
+                                                        autoComplete={'new-password'} {...register('firstName')}/>}
+                </TableCell>
+                <TableCell align={'center'}>{<TextField error={!!errors.lastName} label={errors.lastName && 'Error'}
+                                                        helperText={errors.lastName && errors.lastName.message}
+                                                        autoComplete={'new-password'} {...register('lastName')}/>}
+                </TableCell>
+                <TableCell align={'center'}>{<TextField error={!!errors.email} label={errors.email && 'Error'}
+                                                        helperText={errors.email && errors.email.message}
+                                                        autoComplete={'new-password'}
+                                                        type={'email'}
+                                                        {...register('email')}/>}
+                </TableCell>
+                <TableCell align={'center'}>
                     {<Controller
                         control={control}
                         render={({field}) => (
-                            <NumberFormat autoComplete={'new-password'} {...field} ref={phoneRef}
+                            <NumberFormat customInput={TextField} error={!!errors.phone} label={errors.phone && 'Error'}
+                                          helperText={errors.phone && errors.phone.message}
+                                          autoComplete={'new-password'} {...field} ref={phoneRef}
                                           format={'(###)###-####'} mask={' '}/>
                         )}
                         name={'phone'}/>}
-                    {errors.phone && <span>{errors.phone.message}</span>}
-                </td>
-                <td>
-                    <button form={'newUser'} disabled={!isValid} type="submit">Add to table</button>
-                </td>
-            </tr>
+                </TableCell>
+                <TableCell align={'center'}>
+                    <Button disabled={!isValid || isDirty} color={'primary'} variant={'contained'} type="submit">Add to
+                        table</Button>
+                </TableCell>
+            </TableRow>
         </>
     )
 }

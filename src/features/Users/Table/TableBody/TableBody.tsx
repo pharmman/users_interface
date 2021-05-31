@@ -1,34 +1,38 @@
 import {AddUser} from '../../AddUser/AddUser'
 import {TableBody as MaterialTableBody, TableCell, TableRow} from '@material-ui/core'
-import React, {Dispatch, SetStateAction} from 'react'
+import React from 'react'
 import {UserType} from '../../users-reducer'
+import {TitlesType} from '../TableContainer'
 
 type TableBodyPropsType = {
     data: UserType[]
-    getValues: (user:UserType) => Array<string | number>
-    setCurrentUser: Dispatch<SetStateAction<UserType | null>>
-    toggleAddUser: (state:boolean) => void
+    setCurrentUserHandler: (user: UserType) => void
     addUser: boolean
+    titles: TitlesType[]
 }
 
-export const TableBody:React.FC<TableBodyPropsType> = ({setCurrentUser, data,getValues, toggleAddUser, addUser}) => {
+export const TableBody: React.FC<TableBodyPropsType> = React.memo(({
+                                                                       setCurrentUserHandler,
+                                                                       data,
+                                                                       titles,
+                                                                       addUser
+                                                                   }) => {
 
-    const changeCurrentUser = (user: UserType) => {
-        setCurrentUser(user)
+    const getValues = (user: UserType): Array<string | number> => {
+        return titles.map(title => typeof user[title] !== 'object' ? user[title] : '')
     }
 
     return (
         <MaterialTableBody>
-            <AddUser toggleAddUser={toggleAddUser}/>
+            {addUser && <AddUser/>}
             {data.map((u, index) => (
-                <TableRow onClick={() => changeCurrentUser(u)}
+                <TableRow onClick={() => setCurrentUserHandler(u)}
                           key={index}>
                     {getValues(u).map((v, index) => (
-                        <TableCell key={index}>{v}</TableCell>
+                        <TableCell align={'center'} key={index}>{v}</TableCell>
                     ))}
                 </TableRow>
             ))}
         </MaterialTableBody>
-
     )
-}
+})

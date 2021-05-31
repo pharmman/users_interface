@@ -1,6 +1,6 @@
 import {createAction, createSlice, PayloadAction} from '@reduxjs/toolkit'
 
-export type AppErrorType = string
+export type AppErrorType = string | null
 
 const initialState = {
     loading: false,

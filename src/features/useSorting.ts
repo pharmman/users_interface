@@ -1,7 +1,10 @@
-import {useState} from 'react'
-import {SortConfigType} from './Users/Users'
+import {useCallback, useState} from 'react'
 import {UserType} from './Users/users-reducer'
 
+export type SortConfigType = {
+    key: keyof UserType | null
+    direction: string
+}
 export const useSorting = (data:Array<any>) => {
     const [sortingField, setSortingField] = useState<SortConfigType>({
         key: null,
@@ -10,17 +13,17 @@ export const useSorting = (data:Array<any>) => {
 
     let sortedData = [...data]
 
-    const sorting = (key: keyof UserType) => {
+    const sorting = useCallback ( (key: keyof UserType | null) => {
         let direction = 'up';
         if (sortingField.key === key && sortingField.direction === 'up') {
             direction = 'down';
         }
         setSortingField({key, direction});
-    }
+    },[sortingField.key, sortingField.direction])
 
     const {key} = sortingField
     if (key) {
-        sortedData.sort((a, b) => {
+        sortedData = sortedData.sort((a, b) => {
                 if (a[key] < b[key]) {
                     return sortingField.direction === 'up' ? -1 : 1;
                 }

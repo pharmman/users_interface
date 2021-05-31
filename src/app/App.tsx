@@ -6,9 +6,6 @@ import {store} from './store'
 import {Main} from './main/Main'
 
 function App() {
-
-
-
     return (
         <div className="App">
             <BrowserRouter>
